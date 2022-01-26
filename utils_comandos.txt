@@ -1,0 +1,11 @@
+ sudo apt-get install jenkins
+   33* 
+   34  sudo systemctl enable jenkins
+   35  sudo systemctl start jenkins
+   36  sudo systemctl status jenkins
+   37  sudo nano /etc/default/jenkins 
+   38  history
+   39  sudo nano /etc/default/jenkins 
+   40  sudo /etc/init.d/jenkins stop
+   41  sudo /etc/init.d/jenkins start
+   42  history
