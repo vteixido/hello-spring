@@ -8,4 +8,20 @@
    39  sudo nano /etc/default/jenkins 
    40  sudo /etc/init.d/jenkins stop
    41  sudo /etc/init.d/jenkins start
-   42  history
+   42  
+    sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+
+        1  cd Downloads/
+        2  tar -zxvf ideaIU-2021.3.1.tar.gz
+        3  sudo mv idea-IU-213.6461.79 /opt/
+        4  ls -l /opt/
+        5  cd ..
+        6  /opt/idea-IU-213.6461.79/bin/idea.sh
+        7  history
+
+
+
+
+
+    
+
