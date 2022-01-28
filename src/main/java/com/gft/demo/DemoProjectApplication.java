@@ -28,7 +28,8 @@ public class DemoProjectApplication {
 	}
 
 	@GetMapping("/add")
-	public int add(@RequestParam(value="a") int a,  @RequestParam(value="b") int b ) {
+	public int add(@RequestParam(value="a", defaultValue = "0") int a,  @RequestParam(value="b", defaultValue = "0") int b ) {
 		return a+b;
 	}
+
 }
