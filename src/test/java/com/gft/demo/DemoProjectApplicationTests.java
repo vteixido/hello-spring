@@ -22,4 +22,16 @@ class DemoProjectApplicationTests {
 				.isEqualTo("Welcome to Hello-spring");
 	}
 
+	@Test
+	void helloTest(@Autowired TestRestTemplate restTemplate) {
+		assertThat(restTemplate.getForObject("/hello", String.class))
+				.isEqualTo("Hello World!");
+	}
+
+	@Test
+	void helloTestVeronica(@Autowired TestRestTemplate restTemplate) {
+		assertThat(restTemplate.getForObject("/hello?name=Veronica", String.class))
+				.isEqualTo("Hello Veronica!");
+	}
+
 }
