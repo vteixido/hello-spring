@@ -1,6 +1,7 @@
 package com.gft.demo;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import org.junit.jupiter.params.ParameterizedTest;
@@ -11,14 +12,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.web.client.RestClientException;
-
-import java.util.Locale;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class DemoProjectApplicationTests {
+	@Autowired TestRestTemplate restTemplate;
 
 	@Test
 	void contextLoads() {
@@ -42,7 +41,6 @@ class DemoProjectApplicationTests {
 				.isEqualTo("Hello Veronica!");
 	}
 
-	@Autowired TestRestTemplate restTemplate;
 	@ParameterizedTest
 	@ValueSource(strings = {"Javier", "Arturo", "Rodriguez", "Veronica%20"})
 	void helloTestParamNames(String name) {
@@ -87,8 +85,8 @@ class DemoProjectApplicationTests {
 				.isEqualTo("3.5");
 	}
 
-	@DisplayName("test multle input values")
-	@ParameterizedTest(name="[{index})] ({arguments}) \"{0}\" ->\"{1}\" ")
+	@DisplayName("test multle input values Hello method")
+	@ParameterizedTest(name="{displayName} [{index})] ({arguments}) \"{0}\" ->\"{1}\" ")
 	@CsvSource({
 			"a, Hello a!",
 			"b, Hello b!",
@@ -103,8 +101,8 @@ class DemoProjectApplicationTests {
 		assertThat(restTemplate.getForObject("/hello?name="+name, String.class))
 				.isEqualTo(expected );
 	}
-	@DisplayName("test multle input values")
-	@ParameterizedTest(name="[{index})] {0} + {1} = {2}")
+	@DisplayName("test multle input values add method ")
+	@ParameterizedTest(name="{displayName} [{index})] {0} + {1} = {2}")
 	@CsvSource({
 			"1,		2,		3",
 			"1,		1,		2",
@@ -129,8 +127,8 @@ class DemoProjectApplicationTests {
 				.isEqualTo(3.5f);
 	}
 
-	@DisplayName("test multle input values")
-	@ParameterizedTest(name="[{index})] {0} + {1} = {2}")
+	@DisplayName("test multle input values add mehod Float")
+	@ParameterizedTest(name="{displayName} [{index})] {0} + {1} = {2}")
 	@CsvSource({
 			"1,		2,		3",
 			"1,		1,		2",
@@ -159,5 +157,36 @@ class DemoProjectApplicationTests {
 		assertThat(restTemplate.getForObject("/add?a=1.5&b=2", Integer.class))
 				.isEqualTo(3.5f);
 	}*/
+
+	@Autowired
+	private DemoProjectApplication app;
+
+	@Test
+	void appCanAddReturnInteger(){
+		assertThat(app.add(1f,2f)).isEqualTo(3);
+	}
+
+	@Test
+	void appCanAddReturnFloat(){
+		assertThat(app.add(1.5f,2f)).isEqualTo(3.5f);
+	}
+	//Clase anidada, para indicar a junit que dentro de la clase anidad tmb hay test que pasar usamos la anotacion @nesd
+	@Nested
+	@DisplayName("Test in nested class AppTest")
+	class AppTest {
+
+		@Autowired
+		private DemoProjectApplication appT;
+		@Test
+		void appCanAddReturnInteger(){
+			assertThat(appT.add(1f,2f)).isEqualTo(3);
+		}
+
+		@Test
+		void appCanAddReturnFloat(){
+			assertThat(appT.add(1.5f,2f)).isEqualTo(3.5f);
+		}
+
+	}
 
 }
