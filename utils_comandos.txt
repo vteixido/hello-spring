@@ -18,7 +18,30 @@
         5  cd ..
         6  /opt/idea-IU-213.6461.79/bin/idea.sh
         7  history
+pipeline {
+    agent any
 
+    stages {
+        stage('Build') {
+            steps {
+                // Get some code from a GitHub repository
+                git branch: 'main', url: 'https://github.com/vteixido/hello-spring.git'
+                // Run Gradle WrapperMaven on a Unix agent.
+                sh " ./gradlew clean test assemble"
+            }
+
+            post {
+                // If gradle was able to run the tests, even if some of the test
+                // failed, record the test results and archive the jar file.
+                success {
+                    junit 'build/test-results/test/*xml'
+                    archiveArtifacts 'build/libs/*.jar'
+                    jacoco execPattern: 'build/jacoco/*.exec'
+                }
+            }
+        }
+    }
+}
 
 
 
