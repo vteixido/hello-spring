@@ -28,7 +28,7 @@ public class DemoProjectApplication {
 	}
 
 	@GetMapping("/add")
-	public Object add(@RequestParam(value="a", defaultValue = "0") float a,  @RequestParam(value="b", defaultValue = "0") float b ) {
+	public Object add(@RequestParam(value="a", defaultValue = "0") Float a,  @RequestParam(value="b", defaultValue = "0") Float b ) {
 
 		Float sum = a+b;
 		Float decimal = sum - sum.intValue();
@@ -40,4 +40,16 @@ public class DemoProjectApplication {
 		}
 	}
 
+	@GetMapping("/multiply")
+	public Object multiply(@RequestParam(value="a", defaultValue = "0") Float a,  @RequestParam(value="b", defaultValue = "0") Float b ) {
+
+		Float product = a*b;
+		Float decimal = product - product.intValue();
+
+		if(decimal  !=  0) {
+			return product;
+		}else{
+			return Integer.valueOf(product.intValue());
+		}
+	}
 }

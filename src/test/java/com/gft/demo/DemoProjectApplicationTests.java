@@ -3,7 +3,6 @@ package com.gft.demo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -12,8 +11,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.web.client.RestClientException;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class DemoProjectApplicationTests {
@@ -146,9 +147,7 @@ class DemoProjectApplicationTests {
 
 	@Test
 	void addFloatException(){
-		Exception thrown = assertThrows(RestClientException.class, () -> {
-			restTemplate.getForObject("/add?a=hola&b=2", Float.class);
-		});
+		assertThrows(RestClientException.class, () -> restTemplate.getForObject("/add?a=hola&b=2", Float.class));
 	}
 
 	/* Perdida de precision en el test, se define una clase integer y el valor esperado es un float, pete error bug...
@@ -175,18 +174,60 @@ class DemoProjectApplicationTests {
 	@DisplayName("Test in nested class AppTest")
 	class AppTest {
 
-		@Autowired
-		private DemoProjectApplication appT;
 		@Test
 		void appCanAddReturnInteger(){
-			assertThat(appT.add(1f,2f)).isEqualTo(3);
+			assertThat(app.add(1f,2f)).isEqualTo(3);
 		}
 
 		@Test
 		void appCanAddReturnFloat(){
-			assertThat(appT.add(1.5f,2f)).isEqualTo(3.5f);
+			assertThat(app.add(1.5f,2f)).isEqualTo(3.5f);
 		}
 
+		@Test
+		//Deberia lanzau un null point exception
+		void appCanAddNull(){
+			Exception thrown = assertThrows(NullPointerException.class, () -> app.add(null, 2f));
+			assertTrue(thrown.toString().contains("NullPointerException"));
+		}
+
+	}
+
+	@Nested
+	class MultiplicationTests{
+
+		@DisplayName("test app multiple input values multiply method")
+		@ParameterizedTest(name="{displayName} [{index})] {0} * {1} = {2}")
+		@CsvSource({
+				"1,		2,		2",
+				"1,		1,		1",
+				"1.0,	1.0,	1",
+				"-1,	-2,		2",
+				"1.5,	2,		3",
+				"1.5,	1.5,	2.25",
+				"0,		2,		0"
+				//"'',	1,		0" solo se realiza en el framwork del springboot
+		})
+		void appCanMultiplyParamNamesCsv(Float a, Float b, String expected) {
+			assertThat(app.multiply(a, b).toString()).isEqualTo(expected);
+		}
+
+		@DisplayName("test multiple input values multiply method")
+		@ParameterizedTest(name="{displayName} [{index})] {0} * {1} = {2}")
+		@CsvSource({
+				"1,		2,		2",
+				"1,		1,		1",
+				"1.0,	1.0,	1",
+				"-1,	-2,		2",
+				"1.5,	2,		3",
+				"1.5,	1.5,	2.25",
+				"0,		2,		0",
+				"'',	1,		0"
+		})
+		void multiplyParamNamesCsv(String a, String b, String expected) {
+			assertThat(restTemplate.getForObject("/multiply?a=" + a + "&b=" + b, String.class))
+					.isEqualTo(expected);
+		}
 	}
 
 }
