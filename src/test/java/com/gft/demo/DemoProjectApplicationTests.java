@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.web.client.RestClientException;
 
+import java.math.BigDecimal;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -226,6 +228,94 @@ class DemoProjectApplicationTests {
 		})
 		void multiplyParamNamesCsv(String a, String b, String expected) {
 			assertThat(restTemplate.getForObject("/multiply?a=" + a + "&b=" + b, String.class))
+					.isEqualTo(expected);
+		}
+	}
+
+	@Nested
+	class DivideTests{
+
+		@DisplayName("test app multiple input values divide method")
+		@ParameterizedTest(name="{displayName} [{index})] {0} / {1} = {2}")
+		@CsvSource({
+				"1,		2,		0.50",
+				"1,		1,		1.00",
+				"1.0,	1.0,	1.00",
+				"-1,	-2,		0.50",
+				"4,		-2,		-2.00",
+				"1.5,	1.5,	1.00",
+				"0,		2,		0.00"
+				//"'',	1,		0" solo se realiza en el framwork del springboot
+		})
+		void appCanDivideParamNamesCsv(BigDecimal a, BigDecimal b, String expected) {
+			assertThat(app.divide(a, b).toString()).isEqualTo(expected);
+		}
+
+		@DisplayName("test multiple input values multiply method")
+		@ParameterizedTest(name="{displayName} [{index})] {0} / {1} = {2}")
+		@CsvSource({
+				"1,		2,		0.50",
+				"1,		1,		1.00",
+				"1.0,	1.0,	1.00",
+				"-1,	-2,		0.50",
+				"4,		-2,		-2.00",
+				"1.5,	1.5,	1.00",
+				"0,		2,		0.00",
+				"'',	1,		0.00"
+		})
+		void divideParamNamesCsv(String a, String b, String expected) {
+			assertThat(restTemplate.getForObject("/divide?a=" + a + "&b=" + b, String.class))
+					.isEqualTo(expected);
+		}
+
+		@DisplayName("Divide exception ")
+		@Test
+		void appCanAddNull(){
+			Exception thrown = assertThrows(ArithmeticException.class, () -> app.divide(new BigDecimal(1), new BigDecimal(0)));
+			assertTrue(thrown.toString().contains("ArithmeticException"));
+		}
+
+		@DisplayName("Divide exception by restemplate")
+		@Test
+		void addFloatException(){
+			assertThrows(RestClientException.class, () -> restTemplate.getForObject("/divide?a=1&b=0", BigDecimal.class));
+		}
+
+	}
+
+	@Nested
+	class SubtractTests{
+
+		@DisplayName("test app multiple input values subtract method")
+		@ParameterizedTest(name="{displayName} [{index})] {0} - {1} = {2}")
+		@CsvSource({
+				"1,		2,		-1",
+				"1,		1,		0",
+				"1.0,	1.0,	0",
+				"-1,	-2,		1",
+				"1.5,	2,		-0.5",
+				"1.5,	1.5,	0",
+				"0,		2,		-2"
+				//"'',	1,		0" solo se realiza en el framwork del springboot
+		})
+		void appCanSubtractParamNamesCsv(Float a, Float b, String expected) {
+			assertThat(app.subtract(a, b).toString()).isEqualTo(expected);
+		}
+
+		@DisplayName("test multiple input values subtract method")
+		@ParameterizedTest(name="{displayName} [{index})] {0} - {1} = {2}")
+		@CsvSource({
+				"1,		2,		-1",
+				"1,		1,		0",
+				"1.0,	1.0,	0",
+				"-1,	-2,		1",
+				"1.5,	2,		-0.5",
+				"1.5,	1.5,	0",
+				"0,		2,		-2",
+				"'',	1,		-1"
+		})
+		void subtractParamNamesCsv(String a, String b, String expected) {
+			assertThat(restTemplate.getForObject("/sub?a=" + a + "&b=" + b, String.class))
 					.isEqualTo(expected);
 		}
 	}
