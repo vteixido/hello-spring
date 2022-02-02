@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Test') {
             steps {
-                sh " ./gradlew clean test check"
+                sh " ./gradlew clean test check pitest"
             }
             post {
                 always {
@@ -13,6 +13,7 @@ pipeline {
                     recordIssues(
                         tools: [
                             pmdParser(pattern: 'build/reports/pmd/*.xml')
+                            pit(pattern: 'build/reports/pitest/*.mutations.xml)
                         ]
                     )
                 }
