@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class DemoProjectApplicationTests {
+	private static final String bParamString = "&b=";
 	@Autowired transient TestRestTemplate restTemplate;
 
 	@Test
@@ -117,7 +118,7 @@ class DemoProjectApplicationTests {
 			"'',	1,		1"
 	})
 	void addParamNamesCsv(String a, String b, String expected) {
-		assertThat(restTemplate.getForObject("/add?a="+a+"&b="+b, String.class))
+		assertThat(restTemplate.getForObject("/add?a="+a+ bParamString +b, String.class))
 				.isEqualTo(expected);
 	}
 	@Test
@@ -143,7 +144,7 @@ class DemoProjectApplicationTests {
 			"'',	1,		1"
 	})
 	void addParamNamesCsvFloat(String a, String b, String expected) {
-		assertThat(restTemplate.getForObject("/add?a="+a+"&b="+b, Float.class))
+		assertThat(restTemplate.getForObject("/add?a="+a+ bParamString +b, Float.class))
 				.isEqualTo(Float.parseFloat(expected));
 	}
 
@@ -160,7 +161,7 @@ class DemoProjectApplicationTests {
 	}*/
 
 	@Autowired
-	private DemoProjectApplication app;
+	private transient DemoProjectApplication app;
 
 	@Test
 	void appCanAddReturnInteger(){
@@ -227,7 +228,7 @@ class DemoProjectApplicationTests {
 				"'',	1,		0"
 		})
 		void multiplyParamNamesCsv(String a, String b, String expected) {
-			assertThat(restTemplate.getForObject("/multiply?a=" + a + "&b=" + b, String.class))
+			assertThat(restTemplate.getForObject("/multiply?a=" + a + bParamString + b, String.class))
 					.isEqualTo(expected);
 		}
 	}
@@ -264,7 +265,7 @@ class DemoProjectApplicationTests {
 				"'',	1,		0.00"
 		})
 		void divideParamNamesCsv(String a, String b, String expected) {
-			assertThat(restTemplate.getForObject("/divide?a=" + a + "&b=" + b, String.class))
+			assertThat(restTemplate.getForObject("/divide?a=" + a + bParamString + b, String.class))
 					.isEqualTo(expected);
 		}
 
@@ -315,7 +316,7 @@ class DemoProjectApplicationTests {
 				"'',	1,		-1"
 		})
 		void subtractParamNamesCsv(String a, String b, String expected) {
-			assertThat(restTemplate.getForObject("/sub?a=" + a + "&b=" + b, String.class))
+			assertThat(restTemplate.getForObject("/sub?a=" + a + bParamString + b, String.class))
 					.isEqualTo(expected);
 		}
 	}
