@@ -24,10 +24,6 @@ class DemoProjectApplicationTests {
 	@Autowired transient TestRestTemplate restTemplate;
 
 	@Test
-	void contextLoads() {
-	}
-
-	@Test
 	void rooTest(@Autowired TestRestTemplate restTemplate) {
 		assertThat(restTemplate.getForObject("/", String.class))
 				.isEqualTo("Welcome to Hello-spring");
@@ -234,7 +230,7 @@ class DemoProjectApplicationTests {
 	}
 
 	@Nested
-	class DivideTests{
+	class DivideTests {
 
 		@DisplayName("test app multiple input values divide method")
 		@ParameterizedTest(name="{displayName} [{index})] {0} / {1} = {2}")
@@ -271,7 +267,7 @@ class DemoProjectApplicationTests {
 
 		@DisplayName("Divide exception ")
 		@Test
-		void appCanAddNull(){
+		void appCanDivideBy0(){
 			Exception thrown = assertThrows(ArithmeticException.class, () -> app.divide(new BigDecimal(1), new BigDecimal(0)));
 			assertTrue(thrown.toString().contains("ArithmeticException"));
 		}
@@ -319,6 +315,50 @@ class DemoProjectApplicationTests {
 			assertThat(restTemplate.getForObject("/sub?a=" + a + bParamString + b, String.class))
 					.isEqualTo(expected);
 		}
+	}
+
+	@Nested
+	class SqrtTest{
+
+		@DisplayName("test app multiple input values sqrt method")
+		@ParameterizedTest(name="{displayName} [{index})] sqrt{0}  = {2}")
+		@CsvSource({
+				"0,				0.00",
+				"2.5,			1.58",
+				"15258.5,		123.53"
+				//"'',	1,		0" solo se realiza en el framwork del springboot
+		})
+		void appCanSqrtParamNamesCsv(BigDecimal a, BigDecimal expected) {
+			assertThat(app.sqrt(a)).isEqualTo(expected);
+		}
+
+		@DisplayName("test web multiple input values sqrt method")
+		@ParameterizedTest(name="{displayName} [{index})] sqrt{0}  = {2}")
+		@CsvSource({
+				"0,				0.00",
+				"2.5,			1.58",
+				"15258.5,		123.53",
+				"'',			0.00"
+				// solo se realiza en el framwork del springboot
+		})
+		void sqrtParamNamesCsv(String a,  String expected) {
+			assertThat(restTemplate.getForObject("/sqrt?a=" + a ,  String.class))
+					.isEqualTo(expected);
+		}
+
+		@DisplayName("Sqrt exception app ")
+		@Test
+		void appCanSqrtNegative(){
+			Exception thrown = assertThrows(ArithmeticException.class, () -> app.sqrt(new BigDecimal(-4)));
+			assertTrue(thrown.toString().contains("ArithmeticException"));
+		}
+
+		@DisplayName("Sqrt exception by restemplate")
+		@Test
+		void addFloatException(){
+			assertThrows(RestClientException.class, () -> restTemplate.getForObject("/sqrt?a=-4", BigDecimal.class));
+		}
+
 	}
 
 }

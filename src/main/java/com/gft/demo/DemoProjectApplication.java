@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.processing.Generated;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 
 @SpringBootApplication
@@ -74,4 +75,11 @@ public class DemoProjectApplication {
 		return a.divide(b,2, RoundingMode.HALF_DOWN);
 
 	}
+
+	@GetMapping("/sqrt")
+	public BigDecimal sqrt(@RequestParam(value="a", defaultValue = "0") BigDecimal a) {
+
+		return a.sqrt( new MathContext(10)).setScale(2,RoundingMode.HALF_DOWN );
+	}
+
 }
