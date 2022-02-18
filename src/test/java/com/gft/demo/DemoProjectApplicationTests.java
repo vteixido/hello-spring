@@ -13,6 +13,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.web.client.RestClientException;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
