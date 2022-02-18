@@ -42,6 +42,78 @@ pipeline {
         }
     }
 }
+   20  yarn add --dev cypress-cucumber-preprocessor
+   21  yarn install
+   22  yarn cy:ci
+   23  trivy fs .
+   24  history
+   25  git status
+   26  cd ..
+   27  ls
+   28  cd hello-robobar-testing/
+   29  git status
+   30  cd..
+   31  cd git-katas
+   32  cd ..
+   33  cd git-katas/
+   34  git status
+   35  cd ..
+   36  cd hello-mocha/
+   37  git status
+   38  git add .
+   39  git status
+   40  cd ..
+   41  cd hello-selenium
+   42  cd Hello-Selenium/
+   43  git status
+   44  git add .
+   45  git status
+   46  cd ..
+   47  cd hello-spring/
+   48  git statis
+   49  git status
+   50  git add .
+   51  git status
+   52  git commit -m 'add DemoprojectApplicationTest.java'
+   53  git pusj
+   54  git push
+   55  git status
+   56  cd ..
+   57  cd mocha-examples/
+   58  git status
+   59  git add .
+   60  git commit -m 'selenium tests'
+   61  git push
+   62  git status
+   63  cd ..
+   64  cd pagina-web/
+   65  git status
+   66  git add .
+   67  git status
+   68  git push
+   69  cd ..
+   70  cd robobar-example/
+   71  git reset HEAD~1
+   72  git status
+   73  cd
+   74  git clone git@github.com:vteixido/hello-sonarqube.git
+   75  cd hello-sonarqube/
+   76  docker-compose ps
+   77  docker-compose up -d
+   78  docker-compose ps
+   79  sudo sysctl -w vm.max_map_count=524288
+   80  sudo sysctl -w fs.file-max=131072
+   81  docker-compose up -d
+   82  ./gradlew sonarqube   -Dsonar.projectKey=hello-sonarqube   -Dsonar.host.url=http://localhost:7575   -Dsonar.login=af422cdbe22e104c34198158b34ba68963135fff
+   83  cd ..
+   84  cd hello-spring/
+   85  ./gradlew sonarqube   -Dsonar.projectKey=hello-sonarqube   -Dsonar.host.url=http://localhost:7575   -Dsonar.login=af422cdbe22e104c34198158b34ba68963135fff
+   86  git status
+   87  git add .
+   88  git push
+   89  history
+
+
 
 
 
